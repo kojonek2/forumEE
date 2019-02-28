@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+	<Resource name="jdbc/postgres" 
+			auth="Container"
+	        type="javax.sql.DataSource" 
+	        driverClassName="org.postgresql.Driver"
+	        url="${dburl}"
+	        maxTotal="9" 
+	        maxIdle="9"
+	        maxWaitMillis="1000"/>
+	<Realm className="org.apache.catalina.realm.DataSourceRealm"
+			dataSourceName="jdbc/postgres"
+	       	userTable="users" 
+	       	userNameCol="username" 
+	       	userCredCol="password"
+	   		userRoleTable="user_roles" 
+	   		roleNameCol="rolename"
+	   		localDataSource="true"/>
+</Context>

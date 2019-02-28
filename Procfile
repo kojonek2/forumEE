@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+web: java $JAVA_OPTS -Ddburl=$JDBC_DATABASE_URL -cp target/dependency/* webapp.runner.launch.Main --port $PORT target/*.war --enable-naming
