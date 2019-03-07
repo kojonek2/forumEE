@@ -15,5 +15,13 @@
 	       	userCredCol="password"
 	   		userRoleTable="user_roles" 
 	   		roleNameCol="rolename"
-	   		localDataSource="true"/>
+	   		localDataSource="true">
+		<CredentialHandler
+		className="org.apache.catalina.realm.MessageDigestCredentialHandler"
+		encoding="UTF-8"
+		algorithm="SHA-256"
+		iterations="50"
+		saltLength="20"	
+		 />   		
+	</Realm>
 </Context>
