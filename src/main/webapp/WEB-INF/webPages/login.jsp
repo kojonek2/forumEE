@@ -22,9 +22,15 @@
 		<div class="container d-flex justify-content-center h-100">
 			<div class="d-flex flex-column justify-content-center col-lg-4">
 				<form class="jumbotron" action="j_security_check" method="POST">
+				
+					<c:if test="${not empty requestScope.sucessMessage}">
+						<div class="alert alert-success" role="alert">
+  							${requestScope.sucessMessage}
+						</div>
+					</c:if>
 					
 					<div class="w-100 d-flex justify-content-center">
-						<h1>Log in!</h1>
+						<h1>Log In!</h1>
 					</div>
 					<c:if test="${param.wrongCredentials}">
 						<div class="alert alert-danger" role="alert">
@@ -33,13 +39,14 @@
 					</c:if>
 					<div class="form-group">
 						<label for="username">Username</label>
-						<input class="form-control" type="text" name="j_username" required="required" id="username">
+						<input class="form-control" type="text" name="j_username" required="required">
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
-						<input class="form-control" type="password" name="j_password" required="required" id="password">
+						<input class="form-control" type="password" name="j_password" required="required">
 					</div>
-					<input type="submit" value="Send" class="btn btn-primary w-100">
+					<input type="submit" value="Log In" class="btn btn-primary w-100">
+					<a href="/register" class="btn btn-link w-100">register</a>
 				</form>
 			</div>
 		</div>

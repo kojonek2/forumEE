@@ -28,7 +28,8 @@ public class UserDAO {
 				try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
 					if (generatedKeys.next())
 						user.setId(generatedKeys.getInt("id"));
-					else throw new SQLException("No generated id was returned");
+					else 
+						throw new SQLException("No generated id was returned");
 				}
 				
 				createRoles(user, connection);
@@ -80,6 +81,22 @@ public class UserDAO {
 		}
 		
 		return user;
+	}
+	
+	public int readUserId(String username) throws SQLException {
+		final String READ_ID = "SELECT id FROM users WHERE username=?;";
+		
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement statement = connection.prepareStatement(READ_ID)) {
+			statement.setString(1, username);
+			
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (resultSet.next())
+					return resultSet.getInt("id");
+				else
+					return -1;
+			}
+		}
 	}
 	
 	private List<String> readRoles(int id, Connection connection) throws SQLException {

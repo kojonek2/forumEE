@@ -2,6 +2,7 @@ package pl.kojonek2.forumEE.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.User;
 import pl.kojonek2.forumEE.dao.UserDAO;
+import pl.kojonek2.forumEE.utils.Utils;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
@@ -25,46 +27,61 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserDAO dao = new UserDAO(); 
-//		User u = new User();
-//		u.setPassword(request.getParameter("password"));
-//		u.setUsername(request.getParameter("username"));
-//		List<String> list = new ArrayList<String>();
-//		list.add("role2");
-//		list.add("role1");
-//		
-//		u.setRoles(list);
-//		try {
-//			dao.create(u);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-		
-//		try {
-//			User u = new User();
-//			u.setId(4);
-//			dao.delete(u);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		UserDAO dao = new UserDAO();
 		
 		try {
-			User u = dao.read(1);
-			List<String> roles = u.getRoles();
-			roles.add("testowa");
-			roles.add("testowaKolejna");
-			roles.remove("user");
-			dao.update(u);
-		} catch (SQLException e) {
-			e.printStackTrace();
+			int existingUser = dao.readUserId(request.getParameter("username"));
+			
+			if (existingUser >= 0) {
+				request.setAttribute("errorMessage", "User already exists!");	
+				request.getRequestDispatcher("/WEB-INF/webPages/register.jsp").forward(request, response);
+				return;
+			}
+		} catch (SQLException e1) {
+			response.sendError(500, "Can't connect to database!");
+			return;
 		}
 		
-//		try {
-//			User user = dao.read("gagasd");
-//			System.out.println(user.getRoles().size());
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		
+		User u = new User();
+		u.setUsername(request.getParameter("username"));
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		
+		List<String> roles = new ArrayList<String>();
+		roles.add("user");
+		u.setRoles(roles);
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		String password = request.getParameter("password");
+		String confirmPassword = request.getParameter("confirmPassword");
+		
+		if (password == null || !password.equals(confirmPassword)) {
+			request.setAttribute("errorMessage", "Passwords are not the same!");	
+			request.getRequestDispatcher("/WEB-INF/webPages/register.jsp").forward(request, response);
+			return;
+		}
+		
+		password = Utils.digestPassword(password);
+		if (password == null) {
+			response.sendError(500, "Can't digest password"); //should never occur in normal environment
+			return;
+		}
+		u.setPassword(password);
+		//////////////////////////////////////////////////////////////////////////////////////////
+		
+		try {
+			dao.create(u);
+			request.setAttribute("sucessMessage", "Account has been registered. You can log in.");	
+			request.getRequestDispatcher("/WEB-INF/webPages/login.jsp").forward(request, response);
+			return;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.sendError(500, "Error occured while saving data!");
+			return;
+		}
 	}
 
 }
