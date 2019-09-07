@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.User;
 import pl.kojonek2.forumEE.dao.UserDAO;
+import pl.kojonek2.forumEE.enums.Roles;
 import pl.kojonek2.forumEE.utils.Utils;
 
 @WebServlet("/register")
@@ -50,7 +51,7 @@ public class RegisterServlet extends HttpServlet {
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		
 		List<String> roles = new ArrayList<String>();
-		roles.add("user");
+		roles.add(Roles.USER.toString());
 		u.setRoles(roles);
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			dao.create(u);
 			request.setAttribute("sucessMessage", "Account has been registered. You can log in.");	
-			request.getRequestDispatcher("/WEB-INF/webPages/login.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/webPages/register_sucess.jsp").forward(request, response);
 			return;
 			
 		} catch (SQLException e) {
