@@ -8,18 +8,33 @@
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />	
 		<!-- Bootstrap CSS -->
    		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+		<style type="text/css">
+			.jumbotron {
+	    		padding: 2rem 2rem;
+			}
+		</style>
 	</head>
 	<body class="h-100">
 		<jsp:include page="/WEB-INF/fragments/nav_bar.jspf"/>
-		
 	
-		<div class="d-flex flex-column justify-content-center">
-			<c:forEach var="section" items="${requestScope.sections}">
-				<div>
-					<a href="/section?id=${section.id}">Name: ${section.name} </a> <a href="deleteSection?id=${section.id}">delete</a><br>
-					Description ${section.description} <br><br>
-				</div>
-			</c:forEach>
+		<div class="d-flex justify-content-center mt-3">
+		
+			<div class="jumbotron d-inline-flex flex-column col-10 col-md-6">
+				<h1>Sections</h1>
+				<c:forEach var="section" items="${requestScope.sections}">
+					<div class="card">
+						
+						<div class="card-body">
+							<h5 class="card-title"> Name: ${section.name} </h5> 
+							<h6 class="card-subtitle mb-2 text-muted"> Description ${section.description}</h6>
+						
+							<a class="stretched-link" href="/section?id=${section.id}"></a>
+							<a class="btn btn-danger" href="deleteSection?id=${section.id}">delete</a>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
 		</div>
 		
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
