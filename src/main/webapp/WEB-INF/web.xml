@@ -14,6 +14,14 @@
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>user</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>admin pages</web-resource-name>
+			<url-pattern>/deleteSection</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
@@ -29,8 +37,8 @@
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<form-login-config>
-			<form-login-page>/WEB-INF/webPages/login.jsp</form-login-page>
-			<form-error-page>/WEB-INF/webPages/error.jsp</form-error-page>
+			<form-login-page>/WEB-INF/webPages/authentication/login.jsp</form-login-page>
+			<form-error-page>/WEB-INF/webPages/authentication/error.jsp</form-error-page>
 		</form-login-config>
 	</login-config>
 	

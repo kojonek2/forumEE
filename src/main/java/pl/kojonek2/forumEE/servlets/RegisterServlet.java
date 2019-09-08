@@ -21,7 +21,7 @@ public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/webPages/register.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/webPages/authentication/register.jsp").forward(request, response);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
 			
 			if (existingUser >= 0) {
 				request.setAttribute("errorMessage", "User already exists!");	
-				request.getRequestDispatcher("/WEB-INF/webPages/register.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/webPages/authentication/register.jsp").forward(request, response);
 				return;
 			}
 		} catch (SQLException e1) {
@@ -60,7 +60,7 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (password == null || !password.equals(confirmPassword)) {
 			request.setAttribute("errorMessage", "Passwords are not the same!");	
-			request.getRequestDispatcher("/WEB-INF/webPages/register.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/webPages/authentication/register.jsp").forward(request, response);
 			return;
 		}
 		
@@ -75,7 +75,7 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			dao.create(u);
 			request.setAttribute("sucessMessage", "Account has been registered. You can log in.");	
-			request.getRequestDispatcher("/WEB-INF/webPages/register_sucess.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/webPages/authentication/register_sucess.jsp").forward(request, response);
 			return;
 			
 		} catch (SQLException e) {
