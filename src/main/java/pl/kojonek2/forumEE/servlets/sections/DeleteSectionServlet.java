@@ -66,6 +66,14 @@ public class DeleteSectionServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user == null || !user.getRoles().contains(Roles.ADMIN.toString()))
+		{
+			response.sendError(403, "This page is only for admins!");
+			return;
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////
 		
 		if (request.getParameter("id") == null || request.getParameter("action") == null) {
 			response.sendError(400, "Improper parameters!");
@@ -98,6 +106,7 @@ public class DeleteSectionServlet extends HttpServlet {
 			return;
 		}
 		
-		response.sendRedirect("/");
+		request.setAttribute("successMessage", "Section was deleted!");
+		request.getRequestDispatcher("/WEB-INF/webPages/information.jsp").forward(request, response);
 	}
 }

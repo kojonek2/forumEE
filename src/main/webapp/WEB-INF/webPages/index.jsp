@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html class="h-100">
 	<head>
+		<meta charset="UTF-8">
+		<title>ForumEE</title>
+	
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />	
 		<!-- Bootstrap CSS -->
    		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -25,7 +28,13 @@
 		<div class="d-flex justify-content-center mt-3">
 		
 			<div class="jumbotron d-inline-flex flex-column col-10 col-md-6">
-				<h1>Sections</h1>
+				<div class="d-flex  justify-content-between align-items-center">
+					<h1>Sections</h1>
+					<c:if test="${sessionScope.user.admin}">
+						<a class="btn btn-success" href="newSection">new</a>
+					</c:if>
+				</div>
+				
 				
 				<c:if test="${ empty requestScope.sections}">No sections available</c:if>
 				
@@ -36,7 +45,10 @@
 							<h6 class="card-subtitle mb-2 text-muted"> ${section.description}</h6>
 						
 							<a class="stretched-link" href="/section?id=${section.id}"></a>
-							<a class="btn btn-danger before" href="deleteSection?id=${section.id}">delete</a>
+							<c:if test="${sessionScope.user.admin}">
+								<a class="btn btn-danger before" href="deleteSection?id=${section.id}">delete</a>
+								<a class="btn btn-warning before" href="editSection?id=${section.id}">edit</a>
+							</c:if>
 						</div>
 					</div>
 				</c:forEach>

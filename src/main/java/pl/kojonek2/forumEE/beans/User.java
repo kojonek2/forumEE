@@ -3,6 +3,8 @@ package pl.kojonek2.forumEE.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.kojonek2.forumEE.enums.Roles;
+
 public class User {
 
 	private int id = -1;
@@ -43,4 +45,7 @@ public class User {
 		this.roles = roles;
 	}
 
+	public boolean isAdmin() {
+		return roles.contains(Roles.ADMIN.toString());
+	}
 }

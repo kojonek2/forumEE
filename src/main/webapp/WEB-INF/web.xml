@@ -20,6 +20,8 @@
 		<web-resource-collection>
 			<web-resource-name>admin pages</web-resource-name>
 			<url-pattern>/deleteSection</url-pattern>
+			<url-pattern>/newSection</url-pattern>
+			<url-pattern>/editSection</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
