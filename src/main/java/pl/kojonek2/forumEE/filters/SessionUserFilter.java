@@ -13,7 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.UserDAO;
+import pl.kojonek2.forumEE.services.UserService;
 
 @WebFilter("/*")
 public class SessionUserFilter implements Filter {
@@ -29,10 +29,9 @@ public class SessionUserFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		
 		if(httpRequest.getUserPrincipal() != null && httpRequest.getSession().getAttribute("user") == null) {
-			UserDAO dao = new UserDAO();
+			UserService userService = new UserService();
 			try {
-				int userID = dao.readUserId(httpRequest.getUserPrincipal().getName());
-				User user = dao.read(userID);
+				User user = userService.readUser(httpRequest.getUserPrincipal().getName());
 				
 				if (user == null) {
 					logOutUser(httpRequest, response);

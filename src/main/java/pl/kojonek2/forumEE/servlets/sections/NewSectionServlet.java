@@ -9,10 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.kojonek2.forumEE.beans.Section;
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.SectionDAO;
 import pl.kojonek2.forumEE.enums.Roles;
+import pl.kojonek2.forumEE.services.SectionService;
 
 @WebServlet("/newSection")
 public class NewSectionServlet extends HttpServlet {
@@ -67,15 +66,11 @@ public class NewSectionServlet extends HttpServlet {
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		
-		SectionDAO dao = new SectionDAO();
+		SectionService sectionService = new SectionService();
 		
-		Section section = new Section();
-		section.setName(name);
-		section.setDescription(description);
-		section.setRequiredRole(role);
 		
 		try {
-			dao.create(section);
+			sectionService.createSection(name, description, role);
 		} catch (SQLException e) {
 			response.sendError(500, "Can't communicate properly with database!");
 			return;

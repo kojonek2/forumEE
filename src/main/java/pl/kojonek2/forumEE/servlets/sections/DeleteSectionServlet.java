@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.Section;
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.SectionDAO;
 import pl.kojonek2.forumEE.enums.Roles;
+import pl.kojonek2.forumEE.services.SectionService;
 
 @WebServlet("/deleteSection")
 public class DeleteSectionServlet extends HttpServlet {
@@ -38,12 +38,12 @@ public class DeleteSectionServlet extends HttpServlet {
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		
-		SectionDAO dao = new SectionDAO();
+		SectionService sectionService = new SectionService();
 		Section section;
 		int id;
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
-			section = dao.read(id);
+			section = sectionService.readSection(id);
 			
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is not a number!");
@@ -90,13 +90,13 @@ public class DeleteSectionServlet extends HttpServlet {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		SectionDAO dao = new SectionDAO();
+		SectionService sectionService = new SectionService();
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
 			
 			Section section = new Section();
 			section.setId(id);
-			dao.delete(section);
+			sectionService.deleteSection(section);
 			
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is not a number!");

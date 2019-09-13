@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.Section;
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.SectionDAO;
+import pl.kojonek2.forumEE.services.SectionService;
 
 @WebServlet("/mainPage")
 public class MainPageServlet extends HttpServlet {
@@ -21,11 +21,11 @@ public class MainPageServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SectionDAO dao = new SectionDAO();
+		SectionService sectionService = new SectionService();
 		List<Section> sections;
 		
 		try {
-			sections = dao.readForUser((User) request.getSession().getAttribute("user"));
+			sections = sectionService.readSections((User) request.getSession().getAttribute("user"));
 		} catch (SQLException e) {
 			response.sendError(500, "Can't read data from database!");
 			return;

@@ -2,8 +2,6 @@ package pl.kojonek2.forumEE.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.UserDAO;
-import pl.kojonek2.forumEE.enums.Roles;
+import pl.kojonek2.forumEE.services.UserService;
 import pl.kojonek2.forumEE.utils.Utils;
 
 @WebServlet("/register")
@@ -28,12 +25,12 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserDAO dao = new UserDAO();
+		UserService userService = new UserService();
 		
 		try {
-			int existingUser = dao.readUserId(request.getParameter("username"));
+			User existingUser = userService.readUser(request.getParameter("username"));
 			
-			if (existingUser >= 0) {
+			if (existingUser != null) {
 				request.setAttribute("errorMessage", "User already exists!");	
 				request.getRequestDispatcher("/WEB-INF/webPages/authentication/register.jsp").forward(request, response);
 				return;
@@ -45,16 +42,14 @@ public class RegisterServlet extends HttpServlet {
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		
-		User u = new User();
-		u.setUsername(request.getParameter("username"));
+		String username = request.getParameter("username");
+		if (username == null || username.length() <= 0) {
+			response.sendError(400, "username parameter is invalid");
+			return;
+		}
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		
-		List<String> roles = new ArrayList<String>();
-		roles.add(Roles.USER.toString());
-		u.setRoles(roles);
-		
-		//////////////////////////////////////////////////////////////////////////////////////////////
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
 		
@@ -69,11 +64,11 @@ public class RegisterServlet extends HttpServlet {
 			response.sendError(500, "Can't digest password"); //should never occur in normal environment
 			return;
 		}
-		u.setPassword(password);
+		
 		//////////////////////////////////////////////////////////////////////////////////////////
 		
 		try {
-			dao.create(u);
+			userService.createUser(username, password);
 			request.setAttribute("sucessMessage", "Account has been registered. You can log in.");	
 			request.getRequestDispatcher("/WEB-INF/webPages/authentication/register_sucess.jsp").forward(request, response);
 			return;

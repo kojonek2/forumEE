@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.Section;
 import pl.kojonek2.forumEE.beans.User;
-import pl.kojonek2.forumEE.dao.SectionDAO;
 import pl.kojonek2.forumEE.enums.Roles;
+import pl.kojonek2.forumEE.services.SectionService;
 
 @WebServlet("/editSection")
 public class EditSectionServlet extends HttpServlet {
@@ -35,12 +35,12 @@ public class EditSectionServlet extends HttpServlet {
 			return;
 		}
 		
-		SectionDAO dao = new SectionDAO();
+		SectionService serviceSection = new SectionService();
 		Section section;
 		
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
-			section = dao.read(id);
+			section = serviceSection.readSection(id);
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is corrupted!");
 			return;
@@ -76,12 +76,12 @@ public class EditSectionServlet extends HttpServlet {
 			return;
 		}
 		
-		SectionDAO dao = new SectionDAO();
+		SectionService sectionService = new SectionService();
 		Section section;
 		
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
-			section = dao.read(id);
+			section = sectionService.readSection(id);
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is corrupted!");
 			return;
@@ -126,7 +126,7 @@ public class EditSectionServlet extends HttpServlet {
 		section.setRequiredRole(role);
 		
 		try {
-			dao.update(section);
+			sectionService.updateSection(section);
 		} catch (SQLException e) {
 			response.sendError(500, "Can't communicate properly with database!");
 			return;
