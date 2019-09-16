@@ -1,11 +1,14 @@
 package pl.kojonek2.forumEE.beans;
 
-public class Section {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Topic {
+	
 	private int id = -1;
-	private String name;
-	private String description;
-	private String requiredRole;
+	private String title;
+	private List<Post> posts = new ArrayList<>();
+	private Section section;
 	
 	public int getId() {
 		return id;
@@ -15,28 +18,28 @@ public class Section {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
-	public String getDescription() {
-		return description;
+	public List<Post> getPosts() {
+		return posts;
 	}
 	
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
-	
-	public String getRequiredRole() {
-		return requiredRole;
+
+	public Section getSection() {
+		return section;
 	}
-	
-	public void setRequiredRole(String requiredRole) {
-		this.requiredRole = requiredRole;
+
+	public void setSection(Section section) {
+		this.section = section;
 	}
 
 	@Override
@@ -57,11 +60,10 @@ public class Section {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Section other = (Section) obj;
+		Topic other = (Topic) obj;
 		if (id != other.id)
 			return false;
 		return true;
 	}
-	
 	
 }

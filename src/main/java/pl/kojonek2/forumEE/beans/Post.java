@@ -1,42 +1,44 @@
 package pl.kojonek2.forumEE.beans;
 
-public class Section {
+import java.sql.Timestamp;
+
+public class Post {
 
 	private int id = -1;
-	private String name;
-	private String description;
-	private String requiredRole;
-	
+	private User author;
+	private Timestamp postedTimestamp;
+	private String content;
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
+	public User getAuthor() {
+		return author;
 	}
-	
-	public void setName(String name) {
-		this.name = name;
+
+	public void setAuthor(User author) {
+		this.author = author;
 	}
-	
-	public String getDescription() {
-		return description;
+
+	public Timestamp getPostedTimestamp() {
+		return postedTimestamp;
 	}
-	
-	public void setDescription(String description) {
-		this.description = description;
+
+	public void setPostedTimestamp(Timestamp postedTimestamp) {
+		this.postedTimestamp = postedTimestamp;
 	}
-	
-	public String getRequiredRole() {
-		return requiredRole;
+
+	public String getContent() {
+		return content;
 	}
-	
-	public void setRequiredRole(String requiredRole) {
-		this.requiredRole = requiredRole;
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	@Override
@@ -57,11 +59,9 @@ public class Section {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Section other = (Section) obj;
+		Post other = (Post) obj;
 		if (id != other.id)
 			return false;
 		return true;
 	}
-	
-	
 }
