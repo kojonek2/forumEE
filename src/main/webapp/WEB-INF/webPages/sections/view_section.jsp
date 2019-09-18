@@ -29,30 +29,35 @@
 		
 			<div class="jumbotron d-inline-flex flex-column col-10 col-md-6">
 				<div class="d-flex  justify-content-between align-items-center">
-<!-- 					<h1>Sections</h1> -->
 					<nav aria-label="breadcrumb">
-					  <ol class="breadcrumb p-0 m-0">
-					  	<li class="breadcrumb-item d-flex" aria-current="page"><h5>Sections</h5></li>
-					  </ol>
+						  <ol class="breadcrumb p-0 m-0">
+						  	<li class="breadcrumb-item d-flex" aria-current="page"><h5><a href="/">Sections</a></h5></li>
+						  	<li class="breadcrumb-item active d-flex" aria-current="page"><h5>${section.name}</h5></li>
+						  </ol>
 					</nav>
-					<c:if test="${sessionScope.user.admin}">
-						<a class="btn btn-success" href="newSection">new</a>
+					<c:if test="${not empty sessionScope.user}">
+						<a class="btn btn-success" href="newTopic">new</a>
 					</c:if>
 				</div>
 				
 				
-				<c:if test="${ empty requestScope.sections}">No sections available</c:if>
+				<c:if test="${ empty requestScope.topics}">No topics available</c:if>
 				
-				<c:forEach var="section" items="${requestScope.sections}">
+				<c:forEach var="topic" items="${requestScope.topics}">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title"> ${section.name} </h5> 
-							<h6 class="card-subtitle mb-2 text-muted"> ${section.description}</h6>
+							<h5 class="card-title"> ${topic.title} </h5> 
+							<c:if test="${empty topic.posts}">
+								<h6 class="card-subtitle mb-2 text-muted">Empty topic!</h6>
+							</c:if>
+							<c:if test="${not empty topic.posts}">
+								<h6 class="card-subtitle mb-2 text-muted">Last post sent ${topic.lastPostTime} by ${topic.lastPostAuthor}</h6>
+							</c:if>
 						
-							<a class="stretched-link" href="/section?id=${section.id}"></a>
+							<a class="stretched-link" href="/topic?id=${topic.id}"></a>
 							<c:if test="${sessionScope.user.admin}">
-								<a class="btn btn-danger before" href="deleteSection?id=${section.id}">delete</a>
-								<a class="btn btn-warning before" href="editSection?id=${section.id}">edit</a>
+								<a class="btn btn-danger before" href="deleteTopic?id=${topic.id}">delete</a>
+								<a class="btn btn-warning before" href="editTopic?id=${topic.id}">edit</a>
 							</c:if>
 						</div>
 					</div>

@@ -1,5 +1,7 @@
 package pl.kojonek2.forumEE.beans;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,21 @@ public class Topic {
 
 	public void setSection(Section section) {
 		this.section = section;
+	}
+	
+	public String getLastPostTime() {
+		if (posts.size() <= 0)
+			return "";
+		
+		Timestamp timestamp = posts.get(posts.size() - 1).getPostedTimestamp();
+		return DateFormat.getDateTimeInstance().format(timestamp);
+	}
+	
+	public String getLastPostAuthor() {
+		if (posts.size() <= 0)
+			return "";
+		
+		return posts.get(posts.size() - 1).getAuthor().getUsername();
 	}
 
 	@Override

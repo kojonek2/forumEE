@@ -11,6 +11,7 @@
 		<web-resource-collection>
 			<web-resource-name>login page</web-resource-name>
 			<url-pattern>/logIn</url-pattern>
+			<url-pattern>/sectionLogin</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>user</role-name>
@@ -22,6 +23,9 @@
 			<url-pattern>/deleteSection</url-pattern>
 			<url-pattern>/newSection</url-pattern>
 			<url-pattern>/editSection</url-pattern>
+			
+			<url-pattern>/deleteTopic</url-pattern>
+			<url-pattern>/editTopic</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>

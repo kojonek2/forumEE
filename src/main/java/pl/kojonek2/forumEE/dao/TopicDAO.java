@@ -109,8 +109,8 @@ public class TopicDAO {
 		
 		return topic;
 	}
-	//TODO null check in service //FIXME
-	public List<Topic> readForSection(Section section) throws SQLException {
+	
+	public List<Topic> read(Section section) throws SQLException {
 		final String READ = "SELECT id, title FROM topics WHERE section_id=? ORDER BY id;";
 		
 		List<Topic> topics = new ArrayList<>();
