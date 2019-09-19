@@ -25,7 +25,7 @@ public class NewTopicServlet extends HttpServlet {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user == null)
 		{
-			response.sendError(403, "Only loged in users can view this!");
+			response.sendError(403, "Only logged in users can view this!");
 			return;
 		}
 		

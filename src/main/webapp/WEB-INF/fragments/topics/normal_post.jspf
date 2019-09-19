@@ -1,0 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title"> ${post.content} </h5> 
+		<h6 class="card-subtitle mb-2 text-muted">Posted ${post.postTime} by ${post.author.username}</h6>
+	
+		<c:if test="${sessionScope.user.admin}">
+			<a class="btn btn-danger before" href="/deletePost?id=${post.id}&topic=${requestScope.topic.id}#target">delete</a>
+		</c:if>
+		<c:if test="${sessionScope.user.admin or sessionScope.user eq post.author}">
+			<a class="btn btn-warning before" href="/editPost?id=${post.id}">edit</a>
+		</c:if>
+	</div>
+</div>

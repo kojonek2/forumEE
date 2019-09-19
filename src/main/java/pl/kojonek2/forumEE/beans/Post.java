@@ -1,6 +1,7 @@
 package pl.kojonek2.forumEE.beans;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 
 public class Post {
 
@@ -40,7 +41,11 @@ public class Post {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	
+	public String getPostTime() {
+		return DateFormat.getDateTimeInstance().format(postedTimestamp);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
