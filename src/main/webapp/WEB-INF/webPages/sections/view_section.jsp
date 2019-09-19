@@ -32,11 +32,11 @@
 					<nav aria-label="breadcrumb">
 						  <ol class="breadcrumb p-0 m-0">
 						  	<li class="breadcrumb-item d-flex" aria-current="page"><h5><a href="/">Sections</a></h5></li>
-						  	<li class="breadcrumb-item active d-flex" aria-current="page"><h5>${section.name}</h5></li>
+						  	<li class="breadcrumb-item active d-flex" aria-current="page"><h5>${requestScope.section.name}</h5></li>
 						  </ol>
 					</nav>
 					<c:if test="${not empty sessionScope.user}">
-						<a class="btn btn-success" href="newTopic">new</a>
+						<a class="btn btn-success" href="newTopic?section=${requestScope.section.id}">new</a>
 					</c:if>
 				</div>
 				

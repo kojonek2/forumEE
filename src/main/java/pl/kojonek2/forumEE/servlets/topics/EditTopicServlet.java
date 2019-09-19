@@ -1,7 +1,8 @@
-package pl.kojonek2.forumEE.servlets.sections;
+package pl.kojonek2.forumEE.servlets.topics;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,15 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import pl.kojonek2.forumEE.beans.Section;
+import pl.kojonek2.forumEE.beans.Topic;
 import pl.kojonek2.forumEE.beans.User;
 import pl.kojonek2.forumEE.enums.Roles;
 import pl.kojonek2.forumEE.services.SectionService;
+import pl.kojonek2.forumEE.services.TopicService;
 
-@WebServlet("/editSection")
-public class EditSectionServlet extends HttpServlet {
+@WebServlet("/editTopic")
+public class EditTopicServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -29,18 +32,18 @@ public class EditSectionServlet extends HttpServlet {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+	
 		if (request.getParameter("id") == null) {
 			response.sendError(400, "Id parameter not found!");
 			return;
 		}
 		
-		SectionService serviceSection = new SectionService();
-		Section section;
+		TopicService topicService = new TopicService();
+		Topic topic; 
 		
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
-			section = serviceSection.readSection(id);
+			topic = topicService.readTopic(id);
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is corrupted!");
 			return;
@@ -49,16 +52,32 @@ public class EditSectionServlet extends HttpServlet {
 			return;
 		}
 		
-		if (section == null) {
-			request.setAttribute("errorMessage", "Section wasn't found in database!");
+		if (topic == null) {
+			request.setAttribute("errorMessage", "Topic wasn't found in database!");
 			request.getRequestDispatcher("/WEB-INF/webPages/information.jsp").forward(request, response);
 			return;
 		}
 		
-		request.setAttribute("section", section);
-		request.getRequestDispatcher("/WEB-INF/webPages/sections/edit_section.jsp").forward(request, response);
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		SectionService sectionService = new SectionService();
+		List<Section> otherSections;
+		
+		try {
+			otherSections = sectionService.readSections(user);
+			otherSections.remove(topic.getSection());
+		} catch (SQLException e) {
+			response.sendError(500, "Can't communicate properly with database!");
+			return;
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		request.setAttribute("topic", topic);
+		request.setAttribute("otherSections", otherSections);
+		request.getRequestDispatcher("/WEB-INF/webPages/topics/edit_topic.jsp").forward(request, response);
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -69,19 +88,18 @@ public class EditSectionServlet extends HttpServlet {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		if (request.getParameter("id") == null || request.getParameter("name") == null
-				|| request.getParameter("description") == null || request.getParameter("role") == null) {
+	
+		if (request.getParameter("id") == null || request.getParameter("title") == null || request.getParameter("section") == null) {
 			response.sendError(400, "Parameters are not complete!");
 			return;
 		}
 		
-		SectionService sectionService = new SectionService();
-		Section section;
+		TopicService topicService = new TopicService();
+		Topic topic; 
 		
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
-			section = sectionService.readSection(id);
+			topic = topicService.readTopic(id);
 		} catch (NumberFormatException e) {
 			response.sendError(400, "Id parameter is corrupted!");
 			return;
@@ -89,50 +107,55 @@ public class EditSectionServlet extends HttpServlet {
 			response.sendError(500, "Can't communicate properly with database!");
 			return;
 		}
-	
-		if (section == null) {
-			request.setAttribute("errorMessage", "Section wasn't found in database!");
+		
+		if (topic == null) {
+			request.setAttribute("errorMessage", "Topic wasn't found in database!");
 			request.getRequestDispatcher("/WEB-INF/webPages/information.jsp").forward(request, response);
 			return;
 		}
 		
-		////////////////////////////////////////////////////////////////////////////////////////
-
-		String name = request.getParameter("name");
-		String description = request.getParameter("description");
-		String role = request.getParameter("role");
-
-		if (name == null || description == null || role == null) {
-			response.sendError(400, "Improper parameters!");
-			return;
-		}
-
-		if (name.length() > 30 || description.length() > 100) {
-			response.sendError(400, "Name can't be longer than 30 letters and description can't be longer than 100 letters!");
-			return;
-		}
-
-		if (role.equals("")) {
-			role = null;
-		} else if (!role.equals(Roles.USER.toString()) && !role.equals(Roles.ADMIN.toString())) {
-			response.sendError(400, "Improper role!");
-			return;
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		section.setName(name);
-		section.setDescription(description);
-		section.setRequiredRole(role);
+		SectionService sectionService = new SectionService();
+		Section newSection;
 		
 		try {
-			sectionService.updateSection(section);
+			int sectionId = Integer.parseInt(request.getParameter("section"));
+			newSection = sectionService.readSection(sectionId);
+		} catch (NumberFormatException e) {
+			response.sendError(400, "Section parameter is corrupted!");
+			return;
 		} catch (SQLException e) {
 			response.sendError(500, "Can't communicate properly with database!");
 			return;
 		}
 		
-		request.setAttribute("successMessage", "Section was updated!");
+		if (newSection == null) {
+			request.setAttribute("errorMessage", "New section was arleady deleted!");
+			request.getRequestDispatcher("/WEB-INF/webPages/information.jsp").forward(request, response);
+			return;
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String title =  request.getParameter("title");
+		
+		if (title.length() > 100) {
+			response.sendError(400, "Title length can't be longer than 100!");
+			return;
+		}
+		
+		topic.setSection(newSection);
+		topic.setTitle(title);
+		
+		try {
+			topicService.updateTopic(topic);
+		} catch (SQLException e) {
+			response.sendError(500, "Can't communicate properly with database!");
+			return;
+		}
+		
+		request.setAttribute("successMessage", "Topic was updated!");
 		request.getRequestDispatcher("/WEB-INF/webPages/information.jsp").forward(request, response);
 	}
 }
