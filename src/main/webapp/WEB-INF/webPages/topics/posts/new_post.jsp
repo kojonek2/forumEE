@@ -6,7 +6,7 @@
 <html class="h-100">
 	<head>
 		<meta charset="UTF-8">
-		<title>ForumEE</title>
+		<title>Send post to ${requestScope.topic.title}</title>
 	
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />	
 		<!-- Bootstrap CSS -->
@@ -16,48 +16,35 @@
 			.jumbotron {
 	    		padding: 2rem 2rem;
 			}
-			.before {
-				position: relative;
-			 	z-index: 2;
-			}
 		</style>
 	</head>
 	<body class="h-100">
 		<jsp:include page="/WEB-INF/fragments/nav_bar.jspf"/>
 	
 		<div class="d-flex justify-content-center mt-3">
-		
 			<div class="jumbotron d-inline-flex flex-column col-10 col-md-6">
-				<div class="d-flex  justify-content-between align-items-center">
-<!-- 					<h1>Sections</h1> -->
-					<nav aria-label="breadcrumb">
-					  <ol class="breadcrumb p-0 m-0">
-					  	<li class="breadcrumb-item d-flex" aria-current="page"><h5>Sections</h5></li>
-					  </ol>
-					</nav>
-					<c:if test="${sessionScope.user.admin}">
-						<a class="btn btn-success" href="newSection">new section</a>
-					</c:if>
-				</div>
+				<jsp:include page="/WEB-INF/fragments/topics/topic_breadcrumb.jspf">
+					<jsp:param value="0" name="showNew"/>
+				</jsp:include>
 				
 				
-				<c:if test="${ empty requestScope.sections}">No sections available</c:if>
+				<c:if test="${empty requestScope.topic.posts}">No posts available</c:if>
 				
-				<c:forEach var="section" items="${requestScope.sections}">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title"> ${section.name} </h5> 
-							<h6 class="card-subtitle mb-2 text-muted"> ${section.description}</h6>
-						
-							<a class="stretched-link" href="/section?id=${section.id}"></a>
-							<c:if test="${sessionScope.user.admin}">
-								<a class="btn btn-danger before" href="deleteSection?id=${section.id}">delete</a>
-								<a class="btn btn-warning before" href="editSection?id=${section.id}">edit</a>
-							</c:if>
-						</div>
-					</div>
+				<c:forEach var="post" items="${requestScope.topic.posts}">
+					<c:set var="post" scope="request" value="${post}"/>
+				
+					<jsp:include page="/WEB-INF/fragments/topics/normal_post.jspf"/>
 				</c:forEach>
 				
+				<form method="post" action="newPost?topic=${requestScope.topic.id}">
+					<div id="target" class="card">
+						<div class="card-body">
+							<textarea name="post" class="form-control" maxlength="5000" required="required" rows="6"></textarea>
+							
+							<button class="btn btn-primary w-100 mt-1" type="submit">Post</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		

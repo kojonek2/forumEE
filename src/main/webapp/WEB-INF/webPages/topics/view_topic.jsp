@@ -28,14 +28,16 @@
 				
 				<c:if test="${empty requestScope.topic.posts}">No posts available</c:if>
 				
-				<c:forEach var="post" items="${requestScope.topic.posts}">
+				<c:forEach varStatus="status" var="post" items="${requestScope.topic.posts}">
 					<c:set var="post" scope="request" value="${post}"/>
 				
-					<jsp:include page="/WEB-INF/fragments/topics/normal_post.jspf"/>
+					<jsp:include page="/WEB-INF/fragments/topics/normal_post.jspf">
+						<jsp:param value="${status.last}" name="last"/>
+					</jsp:include>
 				</c:forEach>
 				
 				<c:if test="${not empty sessionScope.user}">
-					<a class="btn btn-success w-100" href="/newPost?topic=${requestScope.topic.id}">new post</a>
+					<a class="btn btn-success w-100 mt-1" href="/newPost?topic=${requestScope.topic.id}#target">new post</a>
 				</c:if>
 			</div>
 		</div>

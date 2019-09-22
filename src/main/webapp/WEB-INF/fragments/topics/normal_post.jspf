@@ -3,9 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="card">
 	<div class="card-body">
-		<h5 class="card-title"> ${post.content} </h5> 
+		<c:if test="${param.last eq 'true'}">
+			<h5 id="last" class="card-title"> ${post.content} </h5> 
+		</c:if>
+		<c:if test="${param.last ne 'true'}">
+			<h5 class="card-title"> ${post.content} </h5> 
+		</c:if>
+		
 		<h6 class="card-subtitle mb-2 text-muted">Posted ${post.postTime} by ${post.author.username}</h6>
-	
+		
 		<c:if test="${sessionScope.user.admin}">
 			<a class="btn btn-danger before" href="/deletePost?id=${post.id}&topic=${requestScope.topic.id}#target">delete</a>
 		</c:if>

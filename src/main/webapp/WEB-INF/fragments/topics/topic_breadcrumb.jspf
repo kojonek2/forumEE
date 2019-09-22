@@ -10,7 +10,7 @@
 		  	<li class="breadcrumb-item active d-flex" aria-current="page"><h5>${requestScope.topic.title}</h5></li>
 		  </ol>
 	</nav>
-	<c:if test="${not empty sessionScope.user}">
-		<a class="btn btn-success" href="/newPost?topic=${requestScope.topic.id}">new post</a>
+	<c:if test="${not empty sessionScope.user and empty param.showNew}">
+		<a class="btn btn-success" href="/newPost?topic=${requestScope.topic.id}#target">new post</a>
 	</c:if>
 </div>

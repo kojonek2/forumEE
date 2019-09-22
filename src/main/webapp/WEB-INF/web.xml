@@ -13,6 +13,9 @@
 			<url-pattern>/logIn</url-pattern>
 			<url-pattern>/sectionLogin</url-pattern>
 			<url-pattern>/topicLoggin</url-pattern>
+			
+			<url-pattern>/newPost</url-pattern>
+			<url-pattern>/editPost</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>user</role-name>

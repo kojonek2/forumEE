@@ -36,7 +36,7 @@
 						  </ol>
 					</nav>
 					<c:if test="${not empty sessionScope.user}">
-						<a class="btn btn-success" href="/newTopic?section=${requestScope.section.id}">new</a>
+						<a class="btn btn-success" href="/newTopic?section=${requestScope.section.id}">new topic</a>
 					</c:if>
 				</div>
 				

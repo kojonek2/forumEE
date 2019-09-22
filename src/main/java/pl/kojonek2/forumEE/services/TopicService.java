@@ -38,6 +38,25 @@ public class TopicService {
 		return topic;
 	}
 	
+	public Post addPost(Topic topic, String content, User author) throws SQLException {
+		if (topic == null) {
+			System.err.println("can't create post to null topic!");
+			return null;
+		}
+		
+		Post post = new Post();
+		post.setContent(content);
+		post.setAuthor(author);
+		post.setPostedTimestamp(new Timestamp(System.currentTimeMillis()));
+		
+		topic.getPosts().add(post);
+		
+		TopicDAO topicDAO = new TopicDAO();
+		topicDAO.update(topic);
+		
+		return post;
+	}
+	
 	public Topic readTopic(int id) throws SQLException {
 		TopicDAO topicDAO = new TopicDAO();
 		return topicDAO.read(id);

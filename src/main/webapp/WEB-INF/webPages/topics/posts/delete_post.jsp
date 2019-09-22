@@ -41,7 +41,7 @@
 				</c:forEach>
 				
 				<c:if test="${not empty sessionScope.user}">
-					<a class="btn btn-success w-100" href="/newPost?topic=${requestScope.topic.id}">new post</a>
+					<a class="btn btn-success w-100 mt-1" href="/newPost?topic=${requestScope.topic.id}#target">new post</a>
 				</c:if>
 			</div>
 		</div>
