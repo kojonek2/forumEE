@@ -196,8 +196,8 @@ public class TopicDAO {
 				
 				updatePosts(topic, connection);
 				
+				connection.commit();
 				return true;
-				
 			}  catch (SQLException e) {
 				connection.rollback();
 				throw e;

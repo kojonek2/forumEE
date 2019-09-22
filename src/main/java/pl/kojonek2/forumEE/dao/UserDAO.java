@@ -117,24 +117,31 @@ public class UserDAO {
 	
 	public boolean update(User user) throws SQLException {
 		final String UPDATE = "UPDATE users SET username=?, password=? WHERE id=?;";
-		try (Connection connection = ConnectionProvider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
+		try (Connection connection = ConnectionProvider.getConnection()) {
 			
-			List<String> rolesInDatabase = readRoles(user.getId(), connection);
-			List<String> rolesToDelete = rolesInDatabase.stream().filter((role) -> !user.getRoles().contains(role)).collect(Collectors.toList());
-			List<String> rolesToAdd = user.getRoles().stream().filter((role) -> !rolesInDatabase.contains(role)).collect(Collectors.toList());
-			
-			statement.setString(1, user.getUsername());
-			statement.setString(2, user.getPassword());
-			statement.setInt(3, user.getId());
-			
-			int rowsAffected = statement.executeUpdate();
-			if (rowsAffected <= 0)
-				return false;
-			
-			updateRoles(user.getUsername(), rolesToDelete, rolesToAdd, connection);
-			
-			return true;
+			try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
+				
+				List<String> rolesInDatabase = readRoles(user.getId(), connection);
+				List<String> rolesToDelete = rolesInDatabase.stream().filter((role) -> !user.getRoles().contains(role)).collect(Collectors.toList());
+				List<String> rolesToAdd = user.getRoles().stream().filter((role) -> !rolesInDatabase.contains(role)).collect(Collectors.toList());
+				
+				statement.setString(1, user.getUsername());
+				statement.setString(2, user.getPassword());
+				statement.setInt(3, user.getId());
+				
+				int rowsAffected = statement.executeUpdate();
+				if (rowsAffected <= 0)
+					return false;
+				
+				updateRoles(user.getUsername(), rolesToDelete, rolesToAdd, connection);
+				connection.commit();
+				return true;
+			} catch (SQLException e) {
+				connection.rollback();
+				throw e;
+			} finally {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 	
