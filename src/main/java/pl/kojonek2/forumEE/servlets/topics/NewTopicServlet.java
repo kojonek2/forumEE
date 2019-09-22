@@ -120,7 +120,6 @@ public class NewTopicServlet extends HttpServlet {
 		
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		
 		TopicService topicService = new TopicService();
 		Topic topic;
 		
