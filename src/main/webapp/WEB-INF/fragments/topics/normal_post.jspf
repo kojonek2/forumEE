@@ -16,7 +16,7 @@
 			<a class="btn btn-danger before" href="/deletePost?id=${post.id}&topic=${requestScope.topic.id}#target">delete</a>
 		</c:if>
 		<c:if test="${sessionScope.user.admin or sessionScope.user eq post.author}">
-			<a class="btn btn-warning before" href="/editPost?id=${post.id}">edit</a>
+			<a class="btn btn-warning before" href="/editPost?id=${post.id}&topic=${requestScope.topic.id}#target">edit</a>
 		</c:if>
 	</div>
 </div>

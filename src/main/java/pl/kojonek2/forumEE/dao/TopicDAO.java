@@ -238,7 +238,7 @@ public class TopicDAO {
 				statement.setTimestamp(2, post.getPostedTimestamp());
 				statement.setString(3, post.getContent());
 				statement.setInt(4, post.getId());
-				System.out.println("UPDATE");
+				
 				statement.addBatch();
 			}
 			
