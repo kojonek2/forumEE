@@ -51,7 +51,7 @@
 								<h6 class="card-subtitle mb-2 text-muted">Empty topic!</h6>
 							</c:if>
 							<c:if test="${not empty topic.posts}">
-								<h6 class="card-subtitle mb-2 text-muted">Last post sent ${topic.lastPostTime} by ${topic.lastPostAuthor}</h6>
+								<h6 class="card-subtitle mb-2 text-muted">Post count: ${topic.postCount} Last post sent ${topic.lastPostTime} by ${topic.lastPostAuthor}</h6>
 							</c:if>
 						
 							<a class="stretched-link" href="/topic?id=${topic.id}"></a>

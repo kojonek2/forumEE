@@ -58,6 +58,10 @@ public class Topic {
 		
 		return posts.get(posts.size() - 1).getAuthor().getUsername();
 	}
+	
+	public int getPostCount() {
+		return posts.size();
+	}
 
 	@Override
 	public int hashCode() {
